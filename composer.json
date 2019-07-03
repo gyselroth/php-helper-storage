@@ -1,7 +1,7 @@
 {
     "name": "gyselroth/php-helper-s3",
-    "description": "PHP s3-helpers",
-    "keywords": ["helper", "php", "s3", "storage", "upload", "download"],
+    "description": "PHP S3-helper",
+    "keywords": ["php", "helper", "s3", "storage", "upload", "download"],
     "homepage": "https://gyselroth.com",
     "type": "library",
     "license": "Apache-2.0",
@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Gyselroth\\HelperS3\\": "src/Gyselroth/HelperS3/"
+            "Gyselroth\\": "src/Gyselroth/"
         }
     },
     "config": {
