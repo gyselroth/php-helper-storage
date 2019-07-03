@@ -20,23 +20,33 @@ use Aws\S3\S3Client;
 class S3c
 {
     /**
-     * @param array $awsCredentials
+     * @param array  $s3Credentials
+     * @param string $region
+     * @param string $version
+     * @param string $signatureVersion
+     * @param bool   $usePathStyleEndpoint
      * @return S3Client
-     * @uses $awsCredentials['endpoint']
-     * @uses $awsCredentials['accessKey']
-     * @uses $awsCredentials['secretKey']
+     * @uses $s3Credentials['endpoint']
+     * @uses $s3redentials['accessKey']
+     * @uses $s3Credentials['secretKey']
      */
-    public static function connectToS3(array $awsCredentials): S3Client
+    public static function connectToS3(
+        array $s3Credentials,
+        string $region = 'us-west-2',
+        string $version = 'latest',
+        string $signatureVersion = 'v4',
+        bool $usePathStyleEndpoint = true
+    ): S3Client
     {
         return new S3Client([
-            'region'                  => 'us-west-2',
-            'version'                 => 'latest',
-            'signature_version'       => 'v4',
-            'endpoint'                => $awsCredentials['endpoint'],
-            'use_path_style_endpoint' => true,
+            'region'                  => $region,
+            'version'                 => $version,
+            'signature_version'       => $signatureVersion,
+            'endpoint'                => $s3Credentials['endpoint'],
+            'use_path_style_endpoint' => $usePathStyleEndpoint,
             'credentials'             => [
-                'key'    => $awsCredentials['accessKey'],
-                'secret' => $awsCredentials['secretKey'],
+                'key'    => $s3Credentials['accessKey'],
+                'secret' => $s3Credentials['secretKey'],
             ]
         ]);
     }
@@ -63,29 +73,29 @@ class S3c
     }
 
     /**
-     * @param array  $awsCredentials
+     * @param array  $s3Credentials
      * @param string $pathLocalStorage
      * @param bool   $deleteDownloadFilesFromBucket
      * @param string $filenameFilter    Sub-string that must be contained in files to be downloaded
      * @return int
-     * @uses $awsCredentials['endpoint']
-     * @uses $awsCredentials['accessKey']
-     * @uses $awsCredentials['secretKey']
-     * @uses $awsCredentials['bucketName']
+     * @uses $s3Credentials['endpoint']
+     * @uses $s3Credentials['accessKey']
+     * @uses $s3Credentials['secretKey']
+     * @uses $s3Credentials['bucketName']
      */
     public static function downloadFilesFromBucket(
-        array $awsCredentials,
+        array $s3Credentials,
         string $pathLocalStorage,
         bool $deleteDownloadFilesFromBucket = false,
         string $filenameFilter = ''
     ): int
     {
         try {
-            $s3 = self::connectToS3($awsCredentials);
-            self::ensureBucketsExist($s3, [$awsCredentials['bucketName']]);
+            $s3 = self::connectToS3($s3Credentials);
+            self::ensureBucketsExist($s3, [$s3Credentials['bucketName']]);
 
             $amountObjectsDownloaded = 0;
-            $objectsInBucket         = self::getObjectsInS3Bucket($s3, $awsCredentials['bucketName']);
+            $objectsInBucket         = self::getObjectsInS3Bucket($s3, $s3Credentials['bucketName']);
             foreach ($objectsInBucket as $objectInBucket) {
                 foreach ($objectInBucket['Contents'] as $object) {
                     // Download object body to local XML file
@@ -96,7 +106,7 @@ class S3c
                     }
 
                     $object = $s3->getObject([
-                        'Bucket' => $awsCredentials['bucketName'],
+                        'Bucket' => $s3Credentials['bucketName'],
                         'Key'    => $localFilename
                     ]);
 
@@ -118,7 +128,7 @@ class S3c
                 foreach ($objectsInBucket as $objectInBucket) {
                     foreach ($objectInBucket['Contents'] as $object) {
                         $s3->deleteObject([
-                            'Bucket' => $awsCredentials['bucketName'],
+                            'Bucket' => $s3Credentials['bucketName'],
                             'Key'    => $object['Key']]);
                     }
                 }
@@ -131,20 +141,20 @@ class S3c
     }
 
     /**
-     * @param array $awsCredentials
+     * @param array $s3Credentials
      * @param array $filePaths
-     * @uses $awsCredentials['endpoint']
-     * @uses $awsCredentials['accessKey']
-     * @uses $awsCredentials['secretKey']
-     * @uses $awsCredentials['bucketName']
+     * @uses $s3Credentials['endpoint']
+     * @uses $s3Credentials['accessKey']
+     * @uses $s3Credentials['secretKey']
+     * @uses $s3Credentials['bucketName']
      */
     public static function uploadFilesToBucket(
-        array $awsCredentials,
+        array $s3Credentials,
         array $filePaths
     ): void {
 
-        $s3 = self::connectToS3($awsCredentials);
-        self::ensureBucketsExist($s3, [$awsCredentials['bucketName']]);
+        $s3 = self::connectToS3($s3Credentials);
+        self::ensureBucketsExist($s3, [$s3Credentials['bucketName']]);
 
         foreach ($filePaths as $filePath) {
             if (!\file_exists($filePath)) {
@@ -152,7 +162,7 @@ class S3c
             }
 
             $s3->putObject([
-                'Bucket' => $awsCredentials['bucketName'],
+                'Bucket' => $s3Credentials['bucketName'],
                 'Key'    => basename($filePath),
                 'Body'   => \file_get_contents($filePath),
             ]);
@@ -160,26 +170,26 @@ class S3c
     }
 
     /**
-     * @param array $awsCredentials
+     * @param array $s3Credentials
      * @param array $objects
-     * @uses $awsCredentials['endpoint']
-     * @uses $awsCredentials['accessKey']
-     * @uses $awsCredentials['secretKey']
-     * @uses $awsCredentials['bucketName']
+     * @uses $s3Credentials['endpoint']
+     * @uses $s3Credentials['accessKey']
+     * @uses $s3Credentials['secretKey']
+     * @uses $s3Credentials['bucketName']
      * @uses $objects[['key']]   Filename to be stored
      * @uses $objects[['body']]  Content to be stored
      */
     public static function uploadObjectsToBucket(
-        array $awsCredentials,
+        array $s3Credentials,
         array $objects
     ): void {
 
-        $s3 = self::connectToS3($awsCredentials);
-        self::ensureBucketsExist($s3, [$awsCredentials['bucketName']]);
+        $s3 = self::connectToS3($s3Credentials);
+        self::ensureBucketsExist($s3, [$s3Credentials['bucketName']]);
 
         foreach ($objects as $object) {
             $s3->putObject([
-                'Bucket' => $awsCredentials['bucketName'],
+                'Bucket' => $s3Credentials['bucketName'],
                 'Key'    => $object['key'],
                 'Body'   => $object['body'],
             ]);
