@@ -3,7 +3,7 @@
 /**
  * Copyright (c) 2019 gyselroth™  (http://www.gyselroth.net)
  *
- * @package \gyselroth\HelperS3
+ * @package \gyselroth\HelperStorage
  * @author  gyselroth™  (http://www.gyselroth.com)
  * @link    http://www.gyselroth.com
  * @license Apache-2.0
