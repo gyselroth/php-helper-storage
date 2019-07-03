@@ -9,7 +9,7 @@
  * @license Apache-2.0
  */
 
-//require_once __DIR__ . '/../../vendor/autoload.php';
+namespace Gyselroth;
 
 use Aws\ResultPaginator;
 use Aws\S3\S3Client;
