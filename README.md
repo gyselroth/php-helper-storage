@@ -16,7 +16,7 @@ Features
 #### Useage Example:  
 ```php
 <?php 
- use Gyselroth\HelperStorage;
+ use Gyselroth\HelperStorage\S3c;
  
  $awsCredentials = [
       'endpoint'  => 'http://127.0.0.0:9000',  // using custom/local S3-service, e.g. minio 
