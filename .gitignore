@@ -1,0 +1,6 @@
+.dockerignore
+.idea
+composer.phar
+Dockerifle
+tmp
+vendor

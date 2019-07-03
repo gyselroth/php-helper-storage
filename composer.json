@@ -1,0 +1,35 @@
+{
+    "name": "gyselroth/php-helper-s3",
+    "description": "PHP s3-helpers",
+    "keywords": ["helper", "php", "s3", "storage", "upload", "download"],
+    "homepage": "https://gyselroth.com",
+    "type": "library",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "gyselroth",
+            "email": "mail@gyselroth.com",
+            "homepage": "http://www.gyselroth.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.0",
+        "ext-fileinfo": "*",
+        "ext-openssl": "*",
+        "aws/aws-sdk-php": "3.103.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Gyselroth\\HelperS3\\": "src/Gyselroth/HelperS3/"
+        }
+    },
+    "config": {
+        "secure-http": false,
+        "process-timeout" : 0
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
