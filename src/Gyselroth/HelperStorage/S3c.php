@@ -9,15 +9,15 @@
  * @license Apache-2.0
  */
 
-namespace Gyselroth;
+namespace Gyselroth\HelperStorage;
 
 use Aws\ResultPaginator;
 use Aws\S3\S3Client;
 
 /**
- * S3 cloud storage helper methods
+ * S3(-compatible) cloud storage helper methods
  */
-class HelperS3
+class S3c
 {
     /**
      * @param array $awsCredentials

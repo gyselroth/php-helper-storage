@@ -1,22 +1,22 @@
-gyselroth PHP S3-Helper Library
-===============================
+gyselroth PHP Storage Helper
+============================
 
-PHP helper methods for S3-compatible storage services.
+PHP helper methods for storage services.
 
 
 Features
 --------
 
 * Connect to S3 compatible storage service
-* List buckets
-* Download files from bucket
-* Upload files / objects to bucket
+* List S3 buckets
+* Download files from S3 bucket
+* Upload files / objects to S3 bucket
 
   
 #### Useage Example:  
 ```php
 <?php 
- use Gyselroth\HelperS3;
+ use Gyselroth\HelperStorage;
  
  $awsCredentials = [
       'endpoint'  => 'http://127.0.0.0:9000',  // using custom/local S3-service, e.g. minio 
@@ -25,13 +25,13 @@ Features
   ];
  
  // Download files from bucket
- HelperS3::downloadFilesFromBucket(
+ S3c::downloadFilesFromBucket(
     array_merge($awsCredentials, ['bucketName' => 'myDownloadsBucket']),
     $pathDownloads,
     $deleteDownloadFilesFromBucket);
  
  // Upload objects to bucket
- HelperS3::uploadObjectsToBucket(
+ S3c::uploadObjectsToBucket(
     array_merge($awsCredentials, ['bucketName' => 'myUploadsBucket']),
     [
         [
