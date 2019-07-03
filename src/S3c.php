@@ -28,7 +28,7 @@ class S3c
      */
     public static function connectToS3(array $awsCredentials): S3Client
     {
-        return new Aws\S3\S3Client([
+        return new S3Client([
             'region'                  => 'us-west-2',
             'version'                 => 'latest',
             'signature_version'       => 'v4',
