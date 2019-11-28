@@ -32,14 +32,13 @@ class S3c
      */
     public static function connectToS3(
         array $s3Credentials,
-        string $region = 'us-west-2',
         string $version = 'latest',
         string $signatureVersion = 'v4',
         bool $usePathStyleEndpoint = true
     ): S3Client
     {
         return new S3Client([
-            'region'                  => $region,
+            'region'                  => $s3Credentials['region'],
             'version'                 => $version,
             'signature_version'       => $signatureVersion,
             'endpoint'                => $s3Credentials['endpoint'],

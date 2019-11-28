@@ -21,7 +21,8 @@ Features
  $awsCredentials = [
       'endpoint'  => 'http://127.0.0.0:9000',  // using custom/local S3-service, e.g. minio 
       'accessKey' => '<YOUR_ACCESSKEY>',
-      'secretKEY' => '<YOUR_SECRETKEY>'
+      'secretKEY' => '<YOUR_SECRETKEY>',
+      'region'    => '<REGION_CODE>'  
   ];
  
  // Download files from bucket
